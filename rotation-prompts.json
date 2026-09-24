@@ -1,0 +1,53 @@
+{
+  "mode": "built-in image_gen",
+  "assets": [
+    {
+      "name": "lian-030.jpg",
+      "angle": 30,
+      "prompt": "Use case: precise-object-edit. Generate ONE SINGLE photograph for a 12-frame product turntable sequence, portrait 2:3. Input images are adjacent anchor views of EXACT SAME Lian wedding gown. Target angle 30 degrees, front=0, right-facing profile=90, back=180, left-facing profile=270: front three-quarter view, mostly front with slight turn towards screen right. Interpolate the gown rotation between these two anchor views. Fixed camera, same lens, exact same framing and scale, same fixed gold mirrored showroom background, chandelier, ivory marble and white flowers. Only gown and mannequin rotate around the same central vertical axis. Mannequin upright, neck centered at x=50%, garment complete down to hem with floor margin. Preserve exact original ivory long floral lace sleeves, rounded illusion neckline, fitted lace bodice, full tulle ballgown skirt, floral appliques, scalloped hem and short train. Do not redesign. Ultra photorealistic. One continuous photograph only; no collage, panels, inset, text, labels, border, people.",
+      "file": "dist/images/lian-030.jpg"
+    },
+    {
+      "name": "lian-060.jpg",
+      "angle": 60,
+      "prompt": "Use case: precise-object-edit. Generate ONE SINGLE photograph for a 12-frame product turntable sequence, portrait 2:3. Input images are adjacent anchor views of EXACT SAME Lian wedding gown. Target angle 60 degrees, front=0, right-facing profile=90, back=180, left-facing profile=270: front three-quarter view, almost right-facing profile but still showing front bodice. Interpolate the gown rotation between these two anchor views. Fixed camera, same lens, exact same framing and scale, same fixed gold mirrored showroom background, chandelier, ivory marble and white flowers. Only gown and mannequin rotate around the same central vertical axis. Mannequin upright, neck centered at x=50%, garment complete down to hem with floor margin. Preserve exact original ivory long floral lace sleeves, rounded illusion neckline, fitted lace bodice, full tulle ballgown skirt, floral appliques, scalloped hem and short train. Do not redesign. Ultra photorealistic. One continuous photograph only; no collage, panels, inset, text, labels, border, people.",
+      "file": "dist/images/lian-060.jpg"
+    },
+    {
+      "name": "lian-120.jpg",
+      "angle": 120,
+      "prompt": "Use case: precise-object-edit. Generate ONE SINGLE photograph for a 12-frame product turntable sequence, portrait 2:3. Input images are adjacent anchor views of EXACT SAME Lian wedding gown. Target angle 120 degrees, front=0, right-facing profile=90, back=180, left-facing profile=270: rear three-quarter view, mostly right-facing profile with back starting to become visible. Interpolate the gown rotation between these two anchor views. Fixed camera, same lens, exact same framing and scale, same fixed gold mirrored showroom background, chandelier, ivory marble and white flowers. Only gown and mannequin rotate around the same central vertical axis. Mannequin upright, neck centered at x=50%, garment complete down to hem with floor margin. Preserve exact original ivory long floral lace sleeves, rounded illusion neckline, fitted lace bodice, full tulle ballgown skirt, floral appliques, scalloped hem and short train. Do not redesign. Ultra photorealistic. One continuous photograph only; no collage, panels, inset, text, labels, border, people.",
+      "file": "dist/images/lian-120.jpg"
+    },
+    {
+      "name": "lian-150.jpg",
+      "angle": 150,
+      "prompt": "Use case: precise-object-edit. Generate ONE SINGLE photograph for a 12-frame product turntable sequence, portrait 2:3. Input images are adjacent anchor views of EXACT SAME Lian wedding gown. Target angle 150 degrees, front=0, right-facing profile=90, back=180, left-facing profile=270: rear three-quarter view, mostly back with right flank visible. Interpolate the gown rotation between these two anchor views. Fixed camera, same lens, exact same framing and scale, same fixed gold mirrored showroom background, chandelier, ivory marble and white flowers. Only gown and mannequin rotate around the same central vertical axis. Mannequin upright, neck centered at x=50%, garment complete down to hem with floor margin. Preserve exact original ivory long floral lace sleeves, rounded illusion neckline, fitted lace bodice, full tulle ballgown skirt, floral appliques, scalloped hem and short train. Do not redesign. Ultra photorealistic. One continuous photograph only; no collage, panels, inset, text, labels, border, people.",
+      "file": "dist/images/lian-150.jpg"
+    },
+    {
+      "name": "lian-210.jpg",
+      "angle": 210,
+      "prompt": "Use case: precise-object-edit. Generate ONE SINGLE photograph for a 12-frame product turntable sequence, portrait 2:3. Input images are adjacent anchor views of EXACT SAME Lian wedding gown. Target angle 210 degrees, front=0, right-facing profile=90, back=180, left-facing profile=270: rear three-quarter view, mostly back with left flank visible. Interpolate the gown rotation between these two anchor views. Fixed camera, same lens, exact same framing and scale, same fixed gold mirrored showroom background, chandelier, ivory marble and white flowers. Only gown and mannequin rotate around the same central vertical axis. Mannequin upright, neck centered at x=50%, garment complete down to hem with floor margin. Preserve exact original ivory long floral lace sleeves, rounded illusion neckline, fitted lace bodice, full tulle ballgown skirt, floral appliques, scalloped hem and short train. Do not redesign. Ultra photorealistic. One continuous photograph only; no collage, panels, inset, text, labels, border, people.",
+      "file": "dist/images/lian-210.jpg"
+    },
+    {
+      "name": "lian-240.jpg",
+      "angle": 240,
+      "prompt": "Use case: precise-object-edit. Generate ONE SINGLE photograph for a 12-frame product turntable sequence, portrait 2:3. Input images are adjacent anchor views of EXACT SAME Lian wedding gown. Target angle 240 degrees, front=0, right-facing profile=90, back=180, left-facing profile=270: rear three-quarter view, almost left-facing profile with back still visible. Interpolate the gown rotation between these two anchor views. Fixed camera, same lens, exact same framing and scale, same fixed gold mirrored showroom background, chandelier, ivory marble and white flowers. Only gown and mannequin rotate around the same central vertical axis. Mannequin upright, neck centered at x=50%, garment complete down to hem with floor margin. Preserve exact original ivory long floral lace sleeves, rounded illusion neckline, fitted lace bodice, full tulle ballgown skirt, floral appliques, scalloped hem and short train. Do not redesign. Ultra photorealistic. One continuous photograph only; no collage, panels, inset, text, labels, border, people.",
+      "file": "dist/images/lian-240.jpg"
+    },
+    {
+      "name": "lian-300.jpg",
+      "angle": 300,
+      "prompt": "Use case: precise-object-edit. Generate ONE SINGLE photograph for a 12-frame product turntable sequence, portrait 2:3. Input images are adjacent anchor views of EXACT SAME Lian wedding gown. Target angle 300 degrees, front=0, right-facing profile=90, back=180, left-facing profile=270: front three-quarter view, almost left-facing profile with front bodice visible. Interpolate the gown rotation between these two anchor views. Fixed camera, same lens, exact same framing and scale, same fixed gold mirrored showroom background, chandelier, ivory marble and white flowers. Only gown and mannequin rotate around the same central vertical axis. Mannequin upright, neck centered at x=50%, garment complete down to hem with floor margin. Preserve exact original ivory long floral lace sleeves, rounded illusion neckline, fitted lace bodice, full tulle ballgown skirt, floral appliques, scalloped hem and short train. Do not redesign. Ultra photorealistic. One continuous photograph only; no collage, panels, inset, text, labels, border, people.",
+      "file": "dist/images/lian-300.jpg"
+    },
+    {
+      "name": "lian-330.jpg",
+      "angle": 330,
+      "prompt": "Use case: precise-object-edit. Generate ONE SINGLE photograph for a 12-frame product turntable sequence, portrait 2:3. Input images are adjacent anchor views of EXACT SAME Lian wedding gown. Target angle 330 degrees, front=0, right-facing profile=90, back=180, left-facing profile=270: front three-quarter view, mostly front slightly turned towards screen left. Interpolate the gown rotation between these two anchor views. Fixed camera, same lens, exact same framing and scale, same fixed gold mirrored showroom background, chandelier, ivory marble and white flowers. Only gown and mannequin rotate around the same central vertical axis. Mannequin upright, neck centered at x=50%, garment complete down to hem with floor margin. Preserve exact original ivory long floral lace sleeves, rounded illusion neckline, fitted lace bodice, full tulle ballgown skirt, floral appliques, scalloped hem and short train. Do not redesign. Ultra photorealistic. One continuous photograph only; no collage, panels, inset, text, labels, border, people.",
+      "file": "dist/images/lian-330.jpg"
+    }
+  ]
+}

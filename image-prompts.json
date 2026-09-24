@@ -1,0 +1,135 @@
+{
+  "mode": "built-in image_gen",
+  "assets": [
+    {
+      "name": "dress-lian.jpg",
+      "prompt": "Use case: product-mockup. Asset: dress-lian.jpg, portrait 2:3 luxury bridal catalog photograph. One ivory bridal gown on a headless couture mannequin, entire gown and hem visible with generous margin: long fitted sheer floral lace sleeves, fitted lace bodice, elegant modest rounded neckline, cinched waist, voluminous full ballgown skirt of ivory tulle with scattered floral lace appliques and short train. Warm softly lit luxury bridal showroom with crystal chandeliers, gold framed mirrors, ivory marble and white flowers. Ultra photorealistic high-end editorial photography, detailed real lace texture, straight frontal view. No text, watermark, collage, people, cropping.",
+      "file": "dist/images/dress-lian.jpg"
+    },
+    {
+      "name": "dress-reem.jpg",
+      "prompt": "Use case: product-mockup. Asset dress-reem.jpg, portrait 2:3. Photorealistic luxury bridal catalog photograph of one voluminous tulle ballgown with intricate lace on a headless couture mannequin. Entire gown including all hem and train visible with clear floor margin. Warm soft luxury showroom with crystal chandeliers, gold mirrors, ivory marble, white flowers. Exquisite realistic fabric and embroidery, professional editorial photography. No people, text, watermark, collage.",
+      "file": "dist/images/dress-reem.jpg"
+    },
+    {
+      "name": "dress-malaki.jpg",
+      "prompt": "Use case: product-mockup. Asset dress-malaki.jpg, portrait 2:3. Photorealistic luxury bridal catalog photograph of one royal ornate bridal ballgown with dense embroidery and extremely long train spread to the side fully visible on a headless couture mannequin. Entire gown including all hem and train visible with clear floor margin. Warm soft luxury showroom with crystal chandeliers, gold mirrors, ivory marble, white flowers. Exquisite realistic fabric and embroidery, professional editorial photography. No people, text, watermark, collage.",
+      "file": "dist/images/dress-malaki.jpg"
+    },
+    {
+      "name": "dress-noor.jpg",
+      "prompt": "Use case: product-mockup. Asset dress-noor.jpg, portrait 2:3. Photorealistic luxury bridal catalog photograph of one sculptural fitted mermaid wedding dress on a headless couture mannequin. Entire gown including all hem and train visible with clear floor margin. Warm soft luxury showroom with crystal chandeliers, gold mirrors, ivory marble, white flowers. Exquisite realistic fabric and embroidery, professional editorial photography. No people, text, watermark, collage.",
+      "file": "dist/images/dress-noor.jpg"
+    },
+    {
+      "name": "dress-jood.jpg",
+      "prompt": "Use case: product-mockup. Asset dress-jood.jpg, portrait 2:3. Photorealistic luxury bridal catalog photograph of one minimal simple elegant A line ivory satin wedding dress on a headless couture mannequin. Entire gown including all hem and train visible with clear floor margin. Warm soft luxury showroom with crystal chandeliers, gold mirrors, ivory marble, white flowers. Exquisite realistic fabric and embroidery, professional editorial photography. No people, text, watermark, collage.",
+      "file": "dist/images/dress-jood.jpg"
+    },
+    {
+      "name": "dress-yasmin.jpg",
+      "prompt": "Use case: product-mockup. Asset dress-yasmin.jpg, portrait 2:3. Photorealistic luxury bridal catalog photograph of one romantic off shoulder bridal gown on a headless couture mannequin. Entire gown including all hem and train visible with clear floor margin. Warm soft luxury showroom with crystal chandeliers, gold mirrors, ivory marble, white flowers. Exquisite realistic fabric and embroidery, professional editorial photography. No people, text, watermark, collage.",
+      "file": "dist/images/dress-yasmin.jpg"
+    },
+    {
+      "name": "dress-sara.jpg",
+      "prompt": "Use case: product-mockup. Asset dress-sara.jpg, portrait 2:3. Photorealistic luxury bridal catalog photograph of one bridal ballgown of delicate soft cascading tulle layers on a headless couture mannequin. Entire gown including all hem and train visible with clear floor margin. Warm soft luxury showroom with crystal chandeliers, gold mirrors, ivory marble, white flowers. Exquisite realistic fabric and embroidery, professional editorial photography. No people, text, watermark, collage.",
+      "file": "dist/images/dress-sara.jpg"
+    },
+    {
+      "name": "dress-dana.jpg",
+      "prompt": "Use case: product-mockup. Asset dress-dana.jpg, portrait 2:3. Photorealistic luxury bridal catalog photograph of one contemporary straight silhouette bridal gown on a headless couture mannequin. Entire gown including all hem and train visible with clear floor margin. Warm soft luxury showroom with crystal chandeliers, gold mirrors, ivory marble, white flowers. Exquisite realistic fabric and embroidery, professional editorial photography. No people, text, watermark, collage.",
+      "file": "dist/images/dress-dana.jpg"
+    },
+    {
+      "name": "lian-front.jpg",
+      "prompt": "Use case: precise-object-edit. Input image is the reference dress Lian. Make a new photorealistic product photograph of exactly this same gown from straight front, entire gown. Preserve ivory color, exact rounded neckline, long floral lace sleeves, fitted bodice, full ballgown tulle skirt with floral appliques, scalloped lace hem. Maintain same warm gold mirrored crystal chandelier ivory marble bridal showroom. Portrait 2:3. For full views keep complete hem and train with margin. Do not redesign the gown. No people, text, watermark, collage.",
+      "file": "dist/images/lian-front.jpg"
+    },
+    {
+      "name": "lian-back.jpg",
+      "prompt": "Use case: precise-object-edit. Input image is the reference dress Lian. Make a new photorealistic product photograph of exactly this same gown from straight back showing back lace and fastenings, entire gown. Preserve ivory color, exact rounded neckline, long floral lace sleeves, fitted bodice, full ballgown tulle skirt with floral appliques, scalloped lace hem. Maintain same warm gold mirrored crystal chandelier ivory marble bridal showroom. Portrait 2:3. For full views keep complete hem and train with margin. Do not redesign the gown. No people, text, watermark, collage.",
+      "file": "dist/images/lian-back.jpg"
+    },
+    {
+      "name": "lian-right.jpg",
+      "prompt": "Use case: precise-object-edit. Input image is the reference dress Lian. Make a new photorealistic product photograph of exactly this same gown from right side profile, entire gown. Preserve ivory color, exact rounded neckline, long floral lace sleeves, fitted bodice, full ballgown tulle skirt with floral appliques, scalloped lace hem. Maintain same warm gold mirrored crystal chandelier ivory marble bridal showroom. Portrait 2:3. For full views keep complete hem and train with margin. Do not redesign the gown. No people, text, watermark, collage.",
+      "file": "dist/images/lian-right.jpg"
+    },
+    {
+      "name": "lian-left.jpg",
+      "prompt": "Use case: precise-object-edit. Input image is the reference dress Lian. Make a new photorealistic product photograph of exactly this same gown from left side profile, entire gown. Preserve ivory color, exact rounded neckline, long floral lace sleeves, fitted bodice, full ballgown tulle skirt with floral appliques, scalloped lace hem. Maintain same warm gold mirrored crystal chandelier ivory marble bridal showroom. Portrait 2:3. For full views keep complete hem and train with margin. Do not redesign the gown. No people, text, watermark, collage.",
+      "file": "dist/images/lian-left.jpg"
+    },
+    {
+      "name": "lian-detail.jpg",
+      "prompt": "Single portrait close-up photograph of ONLY the bodice and lace sleeve of this exact Lian dress. The entire frame is one uninterrupted macro photo from neckline to waist, detailed ivory floral embroidery, same gold showroom softly blurred behind. Preserve exact reference gown neckline and lace. NO full gown views, NO panels, NO split screen, NO collage, NO inset photos, NO borders. This is one close-up detail photograph only.",
+      "file": "dist/images/lian-detail.jpg"
+    },
+    {
+      "name": "hero-bride.jpg",
+      "prompt": "Use case: photorealistic-natural. Asset hero-bride.jpg. landscape 16:9 composition. bride from behind in beautiful full white gown with long veil cascading across ivory marble showroom floor, cinematic wide composition. Warm soft luxury bridal showroom atmosphere with crystal chandeliers, gold mirrors, ivory marble, white flowers. Professional luxury editorial photography, natural textures, realistic anatomy, fine fabric details. Single image, no collage, no watermark. No text.",
+      "file": "dist/images/hero-bride.jpg"
+    },
+    {
+      "name": "showroom.jpg",
+      "prompt": "Use case: photorealistic-natural. Asset showroom.jpg. landscape 16:9 composition. entire opulent bridal showroom interior with several distinct couture white wedding gowns on mannequins. Warm soft luxury bridal showroom atmosphere with crystal chandeliers, gold mirrors, ivory marble, white flowers. Professional luxury editorial photography, natural textures, realistic anatomy, fine fabric details. Single image, no collage, no watermark. No text.",
+      "file": "dist/images/showroom.jpg"
+    },
+    {
+      "name": "entrance.jpg",
+      "prompt": "Use case: photorealistic-natural. Asset entrance.jpg. landscape 16:9 composition. luxury bridal boutique facade with gold framed glass doorway, ivory stone and white flower displays, exact large gold sign text above entrance: \"الخطوط الذهبية\" and beneath it \"GOLDEN LINES\", legible correct Arabic. Warm soft luxury bridal showroom atmosphere with crystal chandeliers, gold mirrors, ivory marble, white flowers. Professional luxury editorial photography, natural textures, realistic anatomy, fine fabric details. Single image, no collage, no watermark. Exact sign spelling only.",
+      "file": "dist/images/entrance.jpg"
+    },
+    {
+      "name": "quote-bg.jpg",
+      "prompt": "Use case: photorealistic-natural. Asset quote-bg.jpg. landscape 16:9 composition. romantic bride standing near large white flowers, soft luminous window light, elegant dreamy composition. Warm soft luxury bridal showroom atmosphere with crystal chandeliers, gold mirrors, ivory marble, white flowers. Professional luxury editorial photography, natural textures, realistic anatomy, fine fabric details. Single image, no collage, no watermark. No text.",
+      "file": "dist/images/quote-bg.jpg"
+    },
+    {
+      "name": "embroidery.jpg",
+      "prompt": "Use case: photorealistic-natural. Asset embroidery.jpg. landscape 3:2 composition. close photograph of artisan hands carefully embroidering fine white bridal lace at a worktable, detailed needle and thread. Warm soft luxury bridal showroom atmosphere with crystal chandeliers, gold mirrors, ivory marble, white flowers. Professional luxury editorial photography, natural textures, realistic anatomy, fine fabric details. Single image, no collage, no watermark. No text.",
+      "file": "dist/images/embroidery.jpg"
+    },
+    {
+      "name": "designer-1.jpg",
+      "prompt": "Use case: photorealistic-natural. Asset designer-1.jpg. portrait 2:3 composition. adult female bridal designer wearing a tasteful beige hijab working carefully on a white wedding gown on a mannequin. Warm soft luxury bridal showroom atmosphere with crystal chandeliers, gold mirrors, ivory marble, white flowers. Professional luxury editorial photography, natural textures, realistic anatomy, fine fabric details. Single image, no collage, no watermark. No text.",
+      "file": "dist/images/designer-1.jpg"
+    },
+    {
+      "name": "designer-2.jpg",
+      "prompt": "Use case: photorealistic-natural. Asset designer-2.jpg. portrait 2:3 composition. distinguished grey haired male bridal designer in shirt and waistcoat carefully working on a white wedding gown. Warm soft luxury bridal showroom atmosphere with crystal chandeliers, gold mirrors, ivory marble, white flowers. Professional luxury editorial photography, natural textures, realistic anatomy, fine fabric details. Single image, no collage, no watermark. No text.",
+      "file": "dist/images/designer-2.jpg"
+    },
+    {
+      "name": "designer-3.jpg",
+      "prompt": "Use case: photorealistic-natural. Asset designer-3.jpg. portrait 2:3 composition. adult female bridal designer in tailored black suit working on a lace wedding gown on mannequin. Warm soft luxury bridal showroom atmosphere with crystal chandeliers, gold mirrors, ivory marble, white flowers. Professional luxury editorial photography, natural textures, realistic anatomy, fine fabric details. Single image, no collage, no watermark. No text.",
+      "file": "dist/images/designer-3.jpg"
+    },
+    {
+      "name": "collection-1.jpg",
+      "prompt": "Use case: photorealistic-natural. Asset collection-1.jpg. portrait 2:3 composition. extreme close up of opulent white floral lace bridal fabric and tiny pearl beadwork. Warm soft luxury bridal showroom atmosphere with crystal chandeliers, gold mirrors, ivory marble, white flowers. Professional luxury editorial photography, natural textures, realistic anatomy, fine fabric details. Single image, no collage, no watermark. No text.",
+      "file": "dist/images/collection-1.jpg"
+    },
+    {
+      "name": "designer-4.jpg",
+      "prompt": "Use case: photorealistic-natural. Asset designer-4.jpg. portrait 2:3 composition. adult male bridal designer wearing elegant dark suit carefully adjusting a wedding gown on mannequin. Warm soft luxury bridal showroom atmosphere with crystal chandeliers, gold mirrors, ivory marble, white flowers. Professional luxury editorial photography, natural textures, realistic anatomy, fine fabric details. Single image, no collage, no watermark. No text.",
+      "file": "dist/images/designer-4.jpg"
+    },
+    {
+      "name": "collection-2.jpg",
+      "prompt": "Use case: photorealistic-natural. Asset collection-2.jpg. portrait 2:3 composition. close up cascading folds of luminous ivory silk satin bridal fabric. Warm soft luxury bridal showroom atmosphere with crystal chandeliers, gold mirrors, ivory marble, white flowers. Professional luxury editorial photography, natural textures, realistic anatomy, fine fabric details. Single image, no collage, no watermark. No text.",
+      "file": "dist/images/collection-2.jpg"
+    },
+    {
+      "name": "collection-3.jpg",
+      "prompt": "Use case: photorealistic-natural. Asset collection-3.jpg. portrait 2:3 composition. close up soft fine white tulle layers with delicate embroidered tiny flowers. Warm soft luxury bridal showroom atmosphere with crystal chandeliers, gold mirrors, ivory marble, white flowers. Professional luxury editorial photography, natural textures, realistic anatomy, fine fabric details. Single image, no collage, no watermark. No text.",
+      "file": "dist/images/collection-3.jpg"
+    },
+    {
+      "name": "collection-4.jpg",
+      "prompt": "Use case: photorealistic-natural. Asset collection-4.jpg. portrait 2:3 composition. close up richly textured white guipure lace with crystal beads, couture craft. Warm soft luxury bridal showroom atmosphere with crystal chandeliers, gold mirrors, ivory marble, white flowers. Professional luxury editorial photography, natural textures, realistic anatomy, fine fabric details. Single image, no collage, no watermark. No text.",
+      "file": "dist/images/collection-4.jpg"
+    }
+  ]
+}
