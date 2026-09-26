@@ -1,0 +1,1 @@
+{"name":"golden-lines","main":"index.js","compatibility_date":"2026-09-24","assets":{"directory":"../client","binding":"ASSETS","run_worker_first":true},"d1_databases":[{"binding":"DB","database_name":"golden-lines","database_id":"local"}],"r2_buckets":[{"binding":"BUCKET","bucket_name":"golden-lines-media"}]}

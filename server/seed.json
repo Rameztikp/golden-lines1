@@ -1,0 +1,406 @@
+{
+  "settings": {
+    "name": "الخطوط الذهبية",
+    "englishName": "GOLDEN LINES",
+    "tagline": "BRIDAL COUTURE",
+    "phone": "",
+    "email": "",
+    "address": "جدة، المملكة العربية السعودية",
+    "hours": "السبت – الخميس · 9 ص – 9 م",
+    "mapQuery": "Jeddah Saudi Arabia",
+    "announcement": "تفاصيل تُنسج بشغف، لتروي حكايتكِ",
+    "gold": "#947446",
+    "background": "#fcfaf7",
+    "ink": "#302b25",
+    "logo": "/images/brand-original.png",
+    "instagram": "",
+    "tiktok": "",
+    "youtube": "",
+    "snapchat": "",
+    "bookingEnabled": true,
+    "closedDays": [
+      5
+    ],
+    "openTime": 9,
+    "closeTime": 21,
+    "slotCapacity": 1,
+    "services": [
+      "تجربة فستان",
+      "تفصيل حسب المقاس",
+      "استشارة"
+    ],
+    "blockedDates": [],
+    "seoTitle": "الخطوط الذهبية | فساتين زفاف في جدة",
+    "seoDescription": "تصاميم زفاف وتفصيل وتجربة خاصة في الخطوط الذهبية بجدة.",
+    "statBrides": 5000,
+    "statDesigns": 500,
+    "statYears": 10,
+    "sizeChart": [
+      [
+        36,
+        84,
+        66,
+        92
+      ],
+      [
+        38,
+        88,
+        70,
+        96
+      ],
+      [
+        40,
+        92,
+        74,
+        100
+      ],
+      [
+        42,
+        96,
+        78,
+        104
+      ],
+      [
+        44,
+        100,
+        82,
+        108
+      ]
+    ]
+  },
+  "dresses": [
+    {
+      "id": "lian",
+      "name": "ليان",
+      "code": "GL-2026-001",
+      "group": "royal",
+      "sleeve": "long",
+      "cut": "ball",
+      "color": "ivory",
+      "sizes": [
+        36,
+        38,
+        40,
+        42,
+        44
+      ],
+      "designer": 1,
+      "desc": "أكمام دانتيل طويلة وتنورة منفوشة، بتطريز ناعم يروي حكاية من الفخامة.",
+      "image": "/images/dress-lian.jpg",
+      "published": true,
+      "order": 0,
+      "materials": "",
+      "care": "",
+      "design": "",
+      "frames": [
+        {
+          "angle": 0,
+          "src": "/images/lian-front.jpg"
+        },
+        {
+          "angle": 30,
+          "src": "/images/lian-030.jpg"
+        },
+        {
+          "angle": 60,
+          "src": "/images/lian-060.jpg"
+        },
+        {
+          "angle": 90,
+          "src": "/images/lian-right.jpg"
+        },
+        {
+          "angle": 120,
+          "src": "/images/lian-120.jpg"
+        },
+        {
+          "angle": 150,
+          "src": "/images/lian-150.jpg"
+        },
+        {
+          "angle": 180,
+          "src": "/images/lian-back.jpg"
+        },
+        {
+          "angle": 210,
+          "src": "/images/lian-210.jpg"
+        },
+        {
+          "angle": 240,
+          "src": "/images/lian-240.jpg"
+        },
+        {
+          "angle": 270,
+          "src": "/images/lian-left.jpg"
+        },
+        {
+          "angle": 300,
+          "src": "/images/lian-300.jpg"
+        },
+        {
+          "angle": 330,
+          "src": "/images/lian-330.jpg"
+        }
+      ],
+      "detailImage": "/images/lian-detail.jpg",
+      "colors": [
+        "ivory"
+      ]
+    },
+    {
+      "id": "reem",
+      "name": "ريم",
+      "code": "GL-2026-002",
+      "group": "classic",
+      "sleeve": "none",
+      "cut": "ball",
+      "color": "white",
+      "sizes": [
+        36,
+        38,
+        40,
+        42
+      ],
+      "designer": 2,
+      "desc": "طبقات تول حالمة ودانتيل رقيق، بحجم انسيابي يرافق كل خطوة.",
+      "image": "/images/dress-reem.jpg",
+      "published": true,
+      "order": 1,
+      "materials": "",
+      "care": "",
+      "design": "",
+      "frames": [],
+      "detailImage": "",
+      "colors": [
+        "white"
+      ]
+    },
+    {
+      "id": "malaki",
+      "name": "ملكي",
+      "code": "GL-2026-003",
+      "group": "royal",
+      "sleeve": "none",
+      "cut": "ball",
+      "color": "champagne",
+      "sizes": [
+        38,
+        40,
+        42,
+        44
+      ],
+      "designer": 1,
+      "desc": "حضور ملكي بتطريز كثيف وذيل طويل يمتد بأناقة خلفكِ.",
+      "image": "/images/dress-malaki.jpg",
+      "published": true,
+      "order": 2,
+      "materials": "",
+      "care": "",
+      "design": "",
+      "frames": [],
+      "detailImage": "",
+      "colors": [
+        "champagne"
+      ]
+    },
+    {
+      "id": "noor",
+      "name": "نور",
+      "code": "GL-2026-004",
+      "group": "modern",
+      "sleeve": "none",
+      "cut": "mermaid",
+      "color": "white",
+      "sizes": [
+        36,
+        38,
+        40
+      ],
+      "designer": 3,
+      "desc": "قصة حورية تحتفي بالخطوط الانسيابية، وتنسدل برقة عند الأطراف.",
+      "image": "/images/dress-noor.jpg",
+      "published": true,
+      "order": 3,
+      "materials": "",
+      "care": "",
+      "design": "",
+      "frames": [],
+      "detailImage": "",
+      "colors": [
+        "white"
+      ]
+    },
+    {
+      "id": "jood",
+      "name": "جود",
+      "code": "GL-2026-005",
+      "group": "simple",
+      "sleeve": "none",
+      "cut": "aline",
+      "color": "ivory",
+      "sizes": [
+        36,
+        38,
+        40,
+        42,
+        44
+      ],
+      "designer": 4,
+      "desc": "تصميم A-line نقي، يجمع بساطة الخطوط وأناقة التفاصيل.",
+      "image": "/images/dress-jood.jpg",
+      "published": true,
+      "order": 4,
+      "materials": "",
+      "care": "",
+      "design": "",
+      "frames": [],
+      "detailImage": "",
+      "colors": [
+        "ivory"
+      ]
+    },
+    {
+      "id": "yasmin",
+      "name": "ياسمين",
+      "code": "GL-2026-006",
+      "group": "classic",
+      "sleeve": "off",
+      "cut": "aline",
+      "color": "pink",
+      "sizes": [
+        36,
+        38,
+        40,
+        42
+      ],
+      "designer": 2,
+      "desc": "كتف مكشوف ودانتيل ناعم يمنحان الإطلالة طابعاً رومانسياً.",
+      "image": "/images/dress-yasmin.jpg",
+      "published": true,
+      "order": 5,
+      "materials": "",
+      "care": "",
+      "design": "",
+      "frames": [],
+      "detailImage": "",
+      "colors": [
+        "pink"
+      ]
+    },
+    {
+      "id": "sara",
+      "name": "سارة",
+      "code": "GL-2026-007",
+      "group": "simple",
+      "sleeve": "none",
+      "cut": "ball",
+      "color": "ivory",
+      "sizes": [
+        38,
+        40,
+        42,
+        44
+      ],
+      "designer": 4,
+      "desc": "طبقات تول خفيفة تتداخل بنعومة، لفستان حالم ورقيق.",
+      "image": "/images/dress-sara.jpg",
+      "published": true,
+      "order": 6,
+      "materials": "",
+      "care": "",
+      "design": "",
+      "frames": [],
+      "detailImage": "",
+      "colors": [
+        "ivory"
+      ]
+    },
+    {
+      "id": "dana",
+      "name": "دانة",
+      "code": "GL-2026-008",
+      "group": "modern",
+      "sleeve": "none",
+      "cut": "straight",
+      "color": "white",
+      "sizes": [
+        36,
+        38,
+        40,
+        42
+      ],
+      "designer": 3,
+      "desc": "خط مستقيم وعصري، بتفاصيل مدروسة لعروس تعشق الأناقة الهادئة.",
+      "image": "/images/dress-dana.jpg",
+      "published": true,
+      "order": 7,
+      "materials": "",
+      "care": "",
+      "design": "",
+      "frames": [],
+      "detailImage": "",
+      "colors": [
+        "white"
+      ]
+    }
+  ],
+  "collections": [
+    {
+      "id": "royal",
+      "name": "المجموعة الملكية",
+      "description": "فخامة لها حضور",
+      "image": "/images/collection-1.jpg"
+    },
+    {
+      "id": "classic",
+      "name": "المجموعة الكلاسيكية",
+      "description": "أناقة تتخطى الزمن",
+      "image": "/images/collection-2.jpg"
+    },
+    {
+      "id": "modern",
+      "name": "المجموعة العصرية",
+      "description": "جمال برؤية جديدة",
+      "image": "/images/collection-3.jpg"
+    },
+    {
+      "id": "simple",
+      "name": "المجموعة البسيطة",
+      "description": "في البساطة، كل الجمال",
+      "image": "/images/collection-4.jpg"
+    }
+  ],
+  "designers": [
+    {
+      "id": "1",
+      "name": "ليلى القاسمي",
+      "special": "التطريز والقصّات الملكية",
+      "bio": "تبحث في جمال الدانتيل عن تفاصيل تمنح كل فستان هوية خاصة.",
+      "image": "/images/designer-1.jpg"
+    },
+    {
+      "id": "2",
+      "name": "عمر الرفاعي",
+      "special": "الكلاسيكية المتجددة",
+      "bio": "يجمع الخطوط الكلاسيكية والتوازن الدقيق بين القصّة والخامة.",
+      "image": "/images/designer-2.jpg"
+    },
+    {
+      "id": "3",
+      "name": "نور الحسن",
+      "special": "الأناقة العصرية",
+      "bio": "تبتكر تصاميم انسيابية لعروس ترى جمالها في التفاصيل الهادئة.",
+      "image": "/images/designer-3.jpg"
+    },
+    {
+      "id": "4",
+      "name": "آدم منصور",
+      "special": "البساطة الراقية",
+      "bio": "يمنح الخامات الفاخرة مساحة للتعبير عبر قصّات نقية ومدروسة.",
+      "image": "/images/designer-4.jpg"
+    }
+  ],
+  "pages": {},
+  "imageOverrides": {},
+  "hiddenSections": {}
+}

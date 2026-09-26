@@ -1,0 +1,6 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import {execFileSync} from 'node:child_process';
+test('public routes and scripts exist; build excludes local data',()=>{for(const name of ['index','about','dresses','dress-lian','designers','collections','booking','contact','admin'])assert.ok(fs.readFileSync('public/'+name+'.html','utf8').includes('lang="ar"'));for(const file of ['main.js','admin.js','site-cms.js','dress-viewer.js','scene.js'])execFileSync(process.execPath,['--check',path.join('public',file)]);assert.ok(fs.existsSync('dist/server/index.js'));assert.ok(fs.existsSync('dist/client/admin.html'));assert.ok(fs.existsSync('dist/.openai/drizzle/meta/_journal.json'));assert.ok(!fs.existsSync('dist/client/.local'));assert.ok(!fs.readFileSync('dist/server/index.js','utf8').includes('owner@local.test'));});

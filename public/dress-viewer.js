@@ -5,15 +5,12 @@ export function initDressViewer({ dress }) {
   if (!host) return;
   const image = host.querySelector('.viewer-image');
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
-  const isLian = dress.id === 'lian';
+  const hasRotation = dress.frames.length > 1;
   const anchors = { 0: 'front', 90: 'right', 180: 'back', 270: 'left' };
-  const sequence = isLian ? Array.from({ length: 12 }, (_, i) => {
-    const angle = i * 30;
-    return { angle, src: `images/lian-${anchors[angle] || String(angle).padStart(3, '0')}.jpg`, ready: angle === 0 };
-  }) : [{ angle: 0, src: `images/dress-${dress.id}.jpg`, ready: true }];
+  const sequence = (dress.frames.length ? dress.frames : [{angle:0,src:dress.image}]).slice().sort((a,b)=>a.angle-b.angle).map((f,i)=>({...f,ready:i===0}));
   host.classList.add('viewer-realistic');
   host.setAttribute('aria-roledescription', 'عارض صور متعدد الزوايا');
-  host.querySelector('.viewer-caption').textContent = isLian ? 'استكشفي الفستان · 360°' : 'استكشفي التفاصيل';
+  host.querySelector('.viewer-caption').textContent = hasRotation ? 'استكشفي الفستان · 360°' : 'استكشفي التفاصيل';
   const backdrop = document.createElement('div');
   backdrop.className = 'viewer-backdrop'; backdrop.setAttribute('aria-hidden', 'true');
   host.prepend(backdrop);
@@ -21,23 +18,23 @@ export function initDressViewer({ dress }) {
   second.className = 'viewer-image viewer-crossfade'; second.alt = ''; second.setAttribute('aria-hidden', 'true');
   image.after(second);
   const toolbar = document.createElement('div'); toolbar.className = 'turntable-toolbar';
-  toolbar.innerHTML = `${isLian ? '<button type="button" class="turntable-play" aria-label="تشغيل الدوران التلقائي" aria-pressed="false"><span aria-hidden="true">▷</span><span class="play-label">دوران تلقائي</span></button>' : ''}<span class="zoom-readout" aria-live="off">100%</span><span class="view-quality">تفاصيل عالية الدقة</span>`;
+  toolbar.innerHTML = `${hasRotation ? '<button type="button" class="turntable-play" aria-label="تشغيل الدوران التلقائي" aria-pressed="false"><span aria-hidden="true">▷</span><span class="play-label">دوران تلقائي</span></button>' : ''}<span class="zoom-readout" aria-live="off">100%</span><span class="view-quality">تفاصيل عالية الدقة</span>`;
   host.after(toolbar);
   const orbitBar = document.createElement('div'); orbitBar.className = 'orbit-bar';
-  if (isLian) {
+  if (hasRotation) {
     orbitBar.innerHTML = '<div class="orbit-heading"><span>زاوية الرؤية</span><output id="orbit-value">أمام · 0°</output></div><input class="orbit-slider" type="range" min="0" max="360" step="1" value="0" dir="ltr" aria-label="زاوية دوران الفستان" aria-valuetext="أمام، 0 درجة"><div class="orbit-markers" aria-hidden="true"><span>أمام</span><span>أيمن</span><span>خلف</span><span>أيسر</span><span>أمام</span></div>';
     toolbar.after(orbitBar);
   }
   const hint = document.createElement('div'); hint.className = 'viewer-gesture-hint';
-  hint.innerHTML = isLian ? '<span aria-hidden="true">↔</span> اسحبي بهدوء لاستكشاف كل زاوية' : 'كبّري الصورة لاستكشاف التفاصيل';
+  hint.innerHTML = hasRotation ? '<span aria-hidden="true">↔</span> اسحبي بهدوء لاستكشاف كل زاوية' : 'كبّري الصورة لاستكشاف التفاصيل';
   host.append(hint);
   const loadState = document.createElement('span'); loadState.className = 'turntable-load';
-  loadState.setAttribute('role', 'status'); loadState.textContent = isLian ? 'تحميل زوايا الفستان…' : '';
+  loadState.setAttribute('role', 'status'); loadState.textContent = hasRotation ? 'تحميل زوايا الفستان…' : '';
   toolbar.append(loadState);
   const slider = orbitBar.querySelector('input'); const play = toolbar.querySelector('.turntable-play');
   const angleLabel = host.querySelector('#viewer-angle');
   let angle = 0, targetAngle = 0, zoom = 1, targetZoom = 1, x = 0, y = 0, targetX = 0, targetY = 0;
-  let velocity = 0, auto = isLian && !motion.matches, detail = false, pan = false;
+  let velocity = 0, auto = hasRotation && !motion.matches, detail = false, pan = false;
   let visible = true, destroyed = false, raf = 0, lastTime = 0, lastDrag = 0;
   let dragging = false, pinchDistance = 0, pinchStartZoom = 1, sourceA = '', sourceB = '';
   const pointers = new Map(); const disposers = [];
@@ -77,10 +74,10 @@ export function initDressViewer({ dress }) {
     if (!ready.length) return;
     let a = ready[0], b = ready[0], mix = 0;
     if (detail) {
-      a = b = { src: 'images/lian-detail.jpg' };
+      a = b = { src: dress.detailImage || dress.image };
     } else if (ready.length > 1) {
       const idx = ready.findLastIndex(item => item.angle <= value);
-      a = ready[Math.max(0, idx)]; b = ready[(Math.max(0, idx) + 1) % ready.length];
+      const previous=idx<0?ready.length-1:idx; a = ready[previous]; b = ready[(previous+1)%ready.length];
       const span = (b.angle - a.angle + 360) % 360;
       const fraction = (value - a.angle + 360) % 360 / Math.max(1, span);
       // Brief optical dissolve around each switch, avoiding a double silhouette.
@@ -99,7 +96,7 @@ export function initDressViewer({ dress }) {
     toolbar.querySelector('.zoom-readout').textContent = `${Math.round(zoom * 100)}%`;
     host.classList.toggle('viewer-zoomed', zoom > 1.05);
     host.classList.toggle('viewer-panning', pan || zoom > 1.05);
-    if (isLian) {
+    if (hasRotation) {
       const rounded = Math.round(value) % 360;
       slider.value = String(Math.abs(angle - 360) < .02 ? 360 : rounded); slider.disabled = detail;
       slider.setAttribute('aria-valuetext', `${nameOf(value)}، ${rounded} درجة`);
@@ -140,7 +137,7 @@ export function initDressViewer({ dress }) {
     }
     await Promise.all([worker(), worker(), worker()]);
     const loaded = sequence.filter(item => item.ready).length;
-    if (loaded < 2 && isLian) { auto = false; play.disabled = true; loadState.textContent = 'تعذر تحميل بقية الزوايا'; playState(); }
+    if (loaded < 2 && hasRotation) { auto = false; play.disabled = true; loadState.textContent = 'تعذر تحميل بقية الزوايا'; playState(); }
   }
   function distance() { const [a, b] = [...pointers.values()]; return a && b ? Math.hypot(a.x - b.x, a.y - b.y) : 0; }
   on(host, 'pointerdown', event => {
@@ -156,7 +153,7 @@ export function initDressViewer({ dress }) {
     pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
     if (pointers.size === 2) { targetZoom = clamp(pinchStartZoom * distance() / Math.max(1, pinchDistance), 1, 4); velocity = 0; }
     else if (pan || targetZoom > 1.05) { targetX += event.clientX - old.x; targetY += event.clientY - old.y; velocity = 0; }
-    else if (isLian && !detail) {
+    else if (hasRotation && !detail) {
       const delta = (event.clientX - old.x) * 360 / Math.max(300, host.clientWidth * 1.45);
       targetAngle += delta;
       velocity = clamp(delta / Math.max(8, now - lastDrag), -.6, .6);
@@ -213,5 +210,5 @@ export function initDressViewer({ dress }) {
   const resize = new ResizeObserver(() => { bounds(); requestFrame(); }); resize.observe(host);
   on(window, 'pagehide', event => { cancelAnimationFrame(raf); raf = 0; if(event.persisted) return; destroyed = true; observer.disconnect(); resize.disconnect(); disposers.forEach(dispose => dispose()); });
   on(window, 'pageshow', event => { if(event.persisted){lastTime=0;requestFrame();} });
-  playState(); render(); requestFrame(); if (isLian) loadFrames();
+  playState(); render(); requestFrame(); if (hasRotation) loadFrames();
 }

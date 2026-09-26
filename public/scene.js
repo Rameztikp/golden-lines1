@@ -45,7 +45,7 @@ function createScene(host) {
   } else {
     const disk = new THREE.Mesh(new THREE.CylinderGeometry(1.79,1.79,.1,100),dark);
     disk.rotation.x=Math.PI/2;disk.position.z=-.07;group.add(disk);
-    new THREE.TextureLoader().load('images/brand-original.png',texture=>{
+    new THREE.TextureLoader().load((window.goldenLogo||'/images/brand-original.png'),texture=>{
       texture.colorSpace=THREE.SRGBColorSpace;
       const face = new THREE.Mesh(new THREE.CircleGeometry(1.73,100),new THREE.MeshBasicMaterial({map:texture}));
       face.position.z=.015;group.add(face);render();

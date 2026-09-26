@@ -1,0 +1,17 @@
+import http from 'node:http';
+import fs from 'node:fs';
+import path from 'node:path';
+import {DatabaseSync} from 'node:sqlite';
+import worker from '../server/worker.mjs';
+const root=path.resolve('.'),local=path.join(root,'.local');fs.mkdirSync(local,{recursive:true});
+const db=new DatabaseSync(path.join(local,'preview.sqlite'));db.exec('PRAGMA foreign_keys=ON');db.exec('CREATE TABLE IF NOT EXISTS _migrations (name TEXT PRIMARY KEY)');
+for(const f of fs.readdirSync('drizzle').filter(f=>f.endsWith('.sql')).sort()){if(!db.prepare('SELECT name FROM _migrations WHERE name=?').get(f)){db.exec(fs.readFileSync('drizzle/'+f,'utf8'));db.prepare('INSERT INTO _migrations VALUES (?)').run(f)}}
+export const DB={prepare(sql){return {bind(...args){return {async first(){return db.prepare(sql).get(...args)||null},async all(){return {results:db.prepare(sql).all(...args)}},async run(){const r=db.prepare(sql).run(...args);return {meta:{changes:Number(r.changes)}}}}}}}};
+const types={'.html':'text/html;charset=utf-8','.js':'text/javascript;charset=utf-8','.css':'text/css;charset=utf-8','.json':'application/json','.jpg':'image/jpeg','.png':'image/png','.svg':'image/svg+xml'};
+const assetRoot=path.join(root,'public');
+const env={DB,ADMIN_OWNER_EMAIL:'owner@local.test',BUCKET:{async put(key,bytes,{httpMetadata}){fs.writeFileSync(path.join(local,key),bytes);fs.writeFileSync(path.join(local,key+'.json'),JSON.stringify(httpMetadata))},async get(key){const file=path.join(local,key);if(!fs.existsSync(file))return null;return {body:fs.readFileSync(file),httpMetadata:JSON.parse(fs.readFileSync(file+'.json','utf8'))}},async delete(key){for(const f of [key,key+'.json'])fs.rmSync(path.join(local,f),{force:true})}},ASSETS:{async fetch(r){const p=path.resolve(assetRoot,'.'+decodeURIComponent(new URL(r.url).pathname));if(!p.startsWith(assetRoot+path.sep)||!fs.existsSync(p)||!fs.statSync(p).isFile())return new Response('Not found',{status:404});return new Response(fs.readFileSync(p),{headers:{'Content-Type':types[path.extname(p)]||'application/octet-stream'}})}}};
+http.createServer(async(req,res)=>{try{if(!['127.0.0.1:4174','localhost:4174'].includes(req.headers.host)){res.writeHead(403).end();return}const url=new URL(req.url,'http://'+req.headers.host);const headers=new Headers();for(const [k,v]of Object.entries(req.headers))if(!k.startsWith('oai-authenticated-')&&v)headers.set(k,String(v));
+ if(url.pathname==='/signin-with-chatgpt'){res.writeHead(302,{'Set-Cookie':'local_admin=1; HttpOnly; SameSite=Lax; Path=/','Location':'/admin'}).end();return}if(url.pathname==='/signout-with-chatgpt'){res.writeHead(302,{'Set-Cookie':'local_admin=; Max-Age=0; Path=/','Location':'/'}).end();return}
+ if((req.headers.cookie||'').split(';').some(x=>x.trim()==='local_admin=1')){headers.set('oai-authenticated-user-id','local-owner');headers.set('oai-authenticated-user-email','owner@local.test')}
+ const chunks=[];let size=0;for await(const c of req){size+=c.length;if(size>13000000){res.writeHead(413).end();return}chunks.push(c)}const request=new Request(url,{method:req.method,headers,...(!['GET','HEAD'].includes(req.method)?{body:Buffer.concat(chunks)}:{})});const response=await worker.fetch(request,env);res.writeHead(response.status,Object.fromEntries(response.headers));res.end(Buffer.from(await response.arrayBuffer()));}catch(e){console.error(e);res.writeHead(500).end('Preview error')}}).listen(4174,'127.0.0.1',()=>console.log('Local URL: http://127.0.0.1:4174/admin — local preview sign-in only'));
+

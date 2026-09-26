@@ -1,0 +1,7 @@
+import { sqliteTable,text,integer,index,uniqueIndex } from 'drizzle-orm/sqlite-core';
+export const content=sqliteTable('content',{id:text('id').primaryKey(),data:text('data').notNull(),revision:integer('revision').notNull().default(1),updated:text('updated').notNull()});
+export const requests=sqliteTable('requests',{id:text('id').primaryKey(),kind:text('kind').notNull(),data:text('data').notNull(),status:text('status').notNull().default('new'),notes:text('notes').notNull().default(''),created:text('created').notNull(),updated:text('updated').notNull(),version:integer('version').notNull().default(1),dedupe:text('dedupe').notNull()},t=>[index('idx_requests_kind_created').on(t.kind,t.created),uniqueIndex('idx_requests_dedupe').on(t.dedupe)]);
+export const members=sqliteTable('members',{email:text('email').primaryKey(),userId:text('user_id'),role:text('role').notNull(),name:text('name').notNull().default(''),created:text('created').notNull()});
+export const media=sqliteTable('media',{id:text('id').primaryKey(),name:text('name').notNull(),type:text('type').notNull(),size:integer('size').notNull(),created:text('created').notNull()});
+export const audit=sqliteTable('audit',{id:text('id').primaryKey(),actor:text('actor').notNull(),action:text('action').notNull(),target:text('target').notNull(),created:text('created').notNull()},t=>[index('idx_audit_created').on(t.created)]);
+export const limits=sqliteTable('limits',{key:text('key').primaryKey(),count:integer('count').notNull().default(1),expires:integer('expires').notNull()});
