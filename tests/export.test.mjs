@@ -1,7 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {csvCell} from '../public/admin-utils.js';
+import {csvCell,excelCsvBytes,requestsCsv} from '../public/admin-utils.js';
 test('CSV export quotes data and neutralizes formulas including leading whitespace',()=>{
  for(const value of ['=1+1','+cmd','-1+1','@SUM(A1)','  =1+1','\t=1+1','\r=1+1','\n=1+1'])assert.ok(csvCell(value).startsWith('"\''),JSON.stringify(value));
  assert.equal(csvCell('اسم، عربي'),'"اسم، عربي"');assert.equal(csvCell('a"b'),'"a""b"');assert.equal(csvCell(null),'""');assert.equal(csvCell('safe\ntext'),'"safe\ntext"');
 });
+test('request CSV exports use clear Arabic columns for each section',()=>{const base={id:'req-1',status:'new',created:'2026-10-05T10:00:00Z',notes:'داخلي',data:{name:'عميلة',phone:'0501234567',email:'client@example.com',date:'2026-12-01',time:'10:00',wedding:'2027-01-01',service:'تجربة فستان',dress:'lian',notes:'ملاحظة',subject:'استفسار',message:'رسالة'}};const bookings=requestsCsv('bookings',[{...base,kind:'bookings'}]),messages=requestsCsv('messages',[{...base,kind:'messages'}]),subscribers=requestsCsv('subscribers',[{...base,kind:'subscribers'}]);for(const csv of [bookings,messages,subscribers])assert.ok(csv.startsWith('\uFEFFsep=,\r\n'));assert.ok(bookings.includes('"اسم العميلة"'));assert.ok(bookings.includes('"رقم الجوال"'));assert.ok(!bookings.includes('"البريد الإلكتروني"'));assert.ok(messages.includes('"الموضوع"'));assert.ok(messages.includes('"الرسالة"'));assert.ok(!messages.includes('"رقم الجوال"'));assert.ok(subscribers.includes('"تاريخ الاشتراك","البريد الإلكتروني"'));assert.ok(subscribers.includes('"جديد"'))});
+test('Excel CSV bytes round-trip Arabic through the Windows Arabic encoding',()=>{const text=requestsCsv('subscribers',[]).replace(/^\uFEFF/,'');const bytes=excelCsvBytes(text);assert.equal(new TextDecoder('windows-1256').decode(bytes),text);assert.equal(bytes[0],'s'.charCodeAt(0))})

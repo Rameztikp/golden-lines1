@@ -10,3 +10,6 @@
 .admin-skip{top:8px;right:8px;transform:translateY(-160%)}
 .admin-skip:focus{top:8px;transform:none}
 @media(max-width:700px){.admin-sidebar nav button{font-size:.875rem}.sidebar-bottom{display:flex;flex-wrap:wrap;justify-content:space-between;padding:12px 0 0}.admin-table-wrap{max-width:100%}.admin-frame-row{grid-template-columns:65px minmax(0,1fr);padding-bottom:12px;border-bottom:1px solid #ddd}.admin-frame-row>button{grid-column:1/-1}}
+.team-email-column{text-align:center!important}
+.media-card video{width:100%;height:165px;object-fit:cover;background:#111}
+.shooting-guide{margin-top:18px}.shooting-guide summary{cursor:pointer}.shooting-guide ol{padding-right:22px;margin-top:12px;line-height:1.9}.shooting-guide li{margin-bottom:6px}
