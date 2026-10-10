@@ -112,3 +112,10 @@ test('content saves reject missing images without changing the saved revision',a
  const {env}=setup();for(const url of ['/images/does-not-exist.jpg','/media/'+crypto.randomUUID()]){const data=structuredClone(seed);data.dresses[0].image=url;assert.equal((await call(env,'/api/admin/content','PUT',{data,revision:0})).status,400);assert.equal((await call(env,'/api/admin/content')).body.revision,0)}
 });
 
+test('raw image upload validates full bytes instead of a truncated client signature',async()=>{
+ const {env,files}=setup();await call(env,'/api/admin/me');
+ const bytes=fs.readFileSync('public/images/showroom.jpg');
+ const upload=(body)=>worker.fetch(new Request('https://shop.test/api/admin/media',{method:'POST',headers:{Origin:'https://shop.test','oai-authenticated-user-id':'owner-id','oai-authenticated-user-email':'owner@example.test','Content-Type':'image/jpeg','X-Media-Upload':'raw','X-File-Name':'showroom.jpg','X-File-Size':String(body.length),'X-File-Signature':bytes.subarray(0,64).toString('hex')},body}),env);
+ assert.equal((await upload(bytes.subarray(0,64))).status,400);
+ const response=await upload(bytes);assert.equal(response.status,201);const item=await response.json();assert.deepEqual(Buffer.from(files.get(item.id).body),bytes);
+});
