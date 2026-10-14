@@ -23,6 +23,11 @@ export async function verifyAccessIdentity(request, env) {
 export function createCloudflareHandler({verifyIdentity=verifyAccessIdentity, application=app}={}) {
   return {async fetch(request, env, ctx) {
     const url=new URL(request.url);
+    // نسخة www تُحوَّل إلى الدومين الأساسي حتى لا يعدّها جوجل موقعاً مكرراً.
+    if (url.hostname.startsWith('www.')&&!url.pathname.startsWith('/cdn-cgi/')) {
+      url.hostname=url.hostname.slice(4);
+      return Response.redirect(url.toString(),301);
+    }
     if (url.pathname==='/signin-with-chatgpt') return Response.redirect(new URL('/admin',url),302);
     if (url.pathname==='/signout-with-chatgpt') return Response.redirect(new URL('/cdn-cgi/access/logout',url),302);
     const headers=new Headers(request.headers);
@@ -39,7 +44,14 @@ export function createCloudflareHandler({verifyIdentity=verifyAccessIdentity, ap
         });
       }
     }
-    return application.fetch(new Request(request,{headers}),env,ctx);
+    const response=await application.fetch(new Request(request,{headers}),env,ctx);
+    // الرابط التجريبي على workers.dev يبقى يعمل، لكن لا يُفهرس في محركات البحث.
+    if (url.hostname.endsWith('.workers.dev')) {
+      const marked=new Response(response.body,response);
+      marked.headers.set('X-Robots-Tag','noindex');
+      return marked;
+    }
+    return response;
   }};
 }
 export default createCloudflareHandler();

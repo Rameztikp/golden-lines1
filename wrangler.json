@@ -13,6 +13,7 @@
     "html_handling": "none"
   },
   "vars": {
+    "SITE_URL": "https://goldenlines.store",
     "ADMIN_OWNER_EMAIL": "rameztalal.a.h@gmail.com",
     "CF_ACCESS_TEAM_DOMAIN": "https://cool-lake-0a00.cloudflareaccess.com",
     "CF_ACCESS_AUD": "d8bf688754ca9eb9ad1daa30c429a82aa08fe3de24ae1a8aef3c566591ff7742"

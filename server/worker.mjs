@@ -1,5 +1,6 @@
 import imagePaths from './images.json' with {type:'json'};
 import seed from './seed.json' with {type:'json'};
+import {renderPage,robotsTxt,sitemapXml,DEFAULT_ORIGIN} from './seo.mjs';
 export class HttpError extends Error { constructor(status,message){super(message);this.status=status;} }
 const fail=(s,m)=>{throw new HttpError(s,m)};
 export const statement=(env,sql,...args)=>{if(!env.DB)fail(503,'قاعدة البيانات غير متاحة، حاولي مجددًا.');return env.DB.prepare(sql).bind(...args)};
@@ -120,9 +121,13 @@ export async function api(request,env){const url=new URL(request.url),path=url.p
  if(path==='/api/admin/audit'&&method==='GET'){allow(user,['owner']);return json((await statement(env,'SELECT * FROM audit ORDER BY created DESC LIMIT 200').all()).results)}
  fail(404,'المسار غير موجود.');
 }
-export default {async fetch(request,env){try{const u=new URL(request.url);if(u.pathname.startsWith('/api/'))return await api(request,env);if(u.pathname.startsWith('/media/')){if(!['GET','HEAD'].includes(request.method))return new Response(null,{status:405});const key=u.pathname.slice(7);if(!/^[a-f0-9-]{36}$/.test(key))fail(404,'الصورة غير موجودة.');const object=await env.BUCKET?.get(key);if(!object)fail(404,'الصورة غير موجودة.');return new Response(request.method==='HEAD'?null:object.body,{headers:{'Content-Type':object.httpMetadata?.contentType||'application/octet-stream','Cache-Control':'public,max-age=86400','X-Content-Type-Options':'nosniff'}})}
+async function publicSiteData(env){try{return publicContent((await content(env)).data)}catch{return publicContent(structuredClone(seed))}}
+const seoText=(body,type)=>new Response(body,{headers:{'Content-Type':type,'Cache-Control':'public, max-age=3600','X-Content-Type-Options':'nosniff'}});
+export default {async fetch(request,env){try{const u=new URL(request.url);if(u.pathname.startsWith('/api/'))return await api(request,env);const origin=env.SITE_URL||DEFAULT_ORIGIN;if(u.pathname==='/robots.txt')return seoText(robotsTxt(origin),'text/plain; charset=utf-8');if(u.pathname==='/sitemap.xml')return seoText(sitemapXml(await publicSiteData(env),origin),'application/xml; charset=utf-8');if(u.pathname.startsWith('/media/')){if(!['GET','HEAD'].includes(request.method))return new Response(null,{status:405});const key=u.pathname.slice(7);if(!/^[a-f0-9-]{36}$/.test(key))fail(404,'الصورة غير موجودة.');const object=await env.BUCKET?.get(key);if(!object)fail(404,'الصورة غير موجودة.');return new Response(request.method==='HEAD'?null:object.body,{headers:{'Content-Type':object.httpMetadata?.contentType||'application/octet-stream','Cache-Control':'public,max-age=86400','X-Content-Type-Options':'nosniff'}})}
  if(u.pathname==='/admin'||u.pathname==='/admin.html'){await identity(request,env);u.pathname='/admin.html'}
  else if(!u.pathname.split('/').pop().includes('.')){u.pathname=u.pathname==='/'?'/index.html':u.pathname+'.html'}
- const response=await env.ASSETS.fetch(new Request(u,request));const h=new Headers(response.headers);h.set('X-Content-Type-Options','nosniff');h.set('Referrer-Policy','strict-origin-when-cross-origin');if(u.pathname.endsWith('.html'))h.set('Cache-Control','no-cache');return new Response(response.body,{status:response.status,headers:h});
+ const response=await env.ASSETS.fetch(new Request(u,request));const h=new Headers(response.headers);h.set('X-Content-Type-Options','nosniff');h.set('Referrer-Policy','strict-origin-when-cross-origin');if(u.pathname.endsWith('.html'))h.set('Cache-Control','no-cache');
+ if(response.ok&&u.pathname.endsWith('.html')&&u.pathname!=='/admin.html'&&request.method==='GET'){const html=renderPage(await response.text(),await publicSiteData(env),new URL(request.url),origin);h.delete('Content-Length');h.delete('ETag');return new Response(html,{status:response.status,headers:h})}
+ return new Response(response.body,{status:response.status,headers:h});
  }catch(e){if(e.status===401&&!new URL(request.url).pathname.startsWith('/api/'))return Response.redirect(new URL('/signin-with-chatgpt?return_to=%2Fadmin',request.url),302);if(!e.status)console.error('Request failed',e.message);return json({error:e.status?e.message:'تعذر إتمام العملية. حاولي مجددًا.'},e.status||500)}}};
 export {validateData,content,identity,bookingValid};

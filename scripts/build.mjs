@@ -10,6 +10,7 @@ const imageManifest=JSON.stringify(fs.readdirSync('public/images').sort().map(na
 fs.writeFileSync('server/images.json',imageManifest+'\n');
 const code=fs.readFileSync('server/worker.mjs','utf8').replace("import imagePaths from './images.json' with {type:'json'};",'const imagePaths='+imageManifest+';').replace("import seed from './seed.json' with {type:'json'};",'const seed='+fs.readFileSync('server/seed.json','utf8')+';');
 fs.writeFileSync('dist/server/index.js',code);
+fs.copyFileSync('server/seo.mjs','dist/server/seo.mjs');
 fs.copyFileSync('.openai/hosting.json','dist/.openai/hosting.json');
 if(fs.existsSync('drizzle'))fs.cpSync('drizzle','dist/.openai/drizzle',{recursive:true});
 fs.writeFileSync('dist/server/wrangler.json',JSON.stringify({name:'golden-lines',main:'index.js',compatibility_date:'2026-09-24',assets:{directory:'../client',binding:'ASSETS',run_worker_first:true},d1_databases:[{binding:'DB',database_name:'golden-lines',database_id:'local'}],r2_buckets:[{binding:'BUCKET',bucket_name:'golden-lines-media'}]}));
