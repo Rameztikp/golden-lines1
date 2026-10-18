@@ -34,7 +34,7 @@ export function initDressViewer({ dress }) {
   const slider = orbitBar.querySelector('input'); const play = toolbar.querySelector('.turntable-play');
   const angleLabel = host.querySelector('#viewer-angle');
   let angle = 0, targetAngle = 0, zoom = 1, targetZoom = 1, x = 0, y = 0, targetX = 0, targetY = 0;
-  let velocity = 0, auto = hasRotation && !motion.matches, detail = false, pan = false;
+  let velocity = 0, auto = hasRotation && !motion.matches, still = '', pan = false;
   let visible = true, destroyed = false, raf = 0, lastTime = 0, lastDrag = 0;
   let dragging = false, pinchDistance = 0, pinchStartZoom = 1, sourceA = '', sourceB = '';
   const pointers = new Map(); const disposers = [];
@@ -62,7 +62,7 @@ export function initDressViewer({ dress }) {
   }
   function setZoom(value) { stop(); targetZoom = clamp(value, 1, 4); if (targetZoom === 1) targetX = targetY = 0; requestFrame(); }
   function showAngle(value, smooth = true) {
-    detail = false;
+    still = '';
     const current = normalize(angle), delta = ((value - current + 540) % 360) - 180;
     targetAngle = angle + delta;
     if (!smooth || motion.matches) { angle = targetAngle = value; }
@@ -73,8 +73,8 @@ export function initDressViewer({ dress }) {
     const ready = sequence.filter(item => item.ready);
     if (!ready.length) return;
     let a = ready[0], b = ready[0], mix = 0;
-    if (detail) {
-      a = b = { src: dress.detailImage || dress.image };
+    if (still) {
+      a = b = { src: still };
     } else if (ready.length > 1) {
       const idx = ready.findLastIndex(item => item.angle <= value);
       const previous=idx<0?ready.length-1:idx; a = ready[previous]; b = ready[(previous+1)%ready.length];
@@ -92,27 +92,28 @@ export function initDressViewer({ dress }) {
     backdrop.style.backgroundImage = `url("${active}")`;
     const transform = `translate3d(${x.toFixed(2)}px,${y.toFixed(2)}px,0) scale(${zoom.toFixed(4)})`;
     image.style.transform = transform; second.style.transform = transform;
-    image.alt = `فستان ${dress.name} — ${detail ? 'تفاصيل الدانتيل' : nameOf(value)}`;
+    image.alt = `فستان ${dress.name} — ${still ? 'صورة من معرض الفستان' : nameOf(value)}`;
+    document.querySelectorAll('[data-photo]').forEach(button => { const on = button.dataset.photo === still; button.classList.toggle('active', on); button.setAttribute('aria-pressed', String(on)); });
     toolbar.querySelector('.zoom-readout').textContent = `${Math.round(zoom * 100)}%`;
     host.classList.toggle('viewer-zoomed', zoom > 1.05);
     host.classList.toggle('viewer-panning', pan || zoom > 1.05);
     if (hasRotation) {
       const rounded = Math.round(value) % 360;
-      slider.value = String(Math.abs(angle - 360) < .02 ? 360 : rounded); slider.disabled = detail;
+      slider.value = String(Math.abs(angle - 360) < .02 ? 360 : rounded); slider.disabled = !!still;
       slider.setAttribute('aria-valuetext', `${nameOf(value)}، ${rounded} درجة`);
-      orbitBar.querySelector('output').textContent = detail ? 'تفاصيل الدانتيل' : `${nameOf(value)} · ${rounded}°`;
-      angleLabel.textContent = detail ? 'تفاصيل الدانتيل' : `${rounded}° · ${nameOf(value)}`;
+      orbitBar.querySelector('output').textContent = still ? 'صورة ثابتة' : `${nameOf(value)} · ${rounded}°`;
+      angleLabel.textContent = still ? 'صورة ثابتة' : `${rounded}° · ${nameOf(value)}`;
       document.querySelectorAll('[data-angle]').forEach(button => {
-        const activeThumb = detail ? button.dataset.angle === 'detail' : button.dataset.angle === anchors[(Math.round(value / 90) * 90) % 360];
+        const activeThumb = still ? still === (dress.detailImage || dress.image) && button.dataset.angle === 'detail' : button.dataset.angle === anchors[(Math.round(value / 90) * 90) % 360];
         button.classList.toggle('active', activeThumb); button.setAttribute('aria-pressed', String(activeThumb));
       });
-      host.querySelectorAll('.hotspot').forEach(button => { button.hidden = detail || zoom > 1.05 || (value > 8 && value < 352); });
+      host.querySelectorAll('.hotspot').forEach(button => { button.hidden = !!still || zoom > 1.05 || (value > 8 && value < 352); });
     }
   }
   function frame(now) {
     raf = 0; if (destroyed || !visible || document.hidden) return;
     const dt = Math.min(40, lastTime ? now - lastTime : 16); lastTime = now;
-    if (auto && !detail && sequence.filter(item => item.ready).length > 1) targetAngle += dt * .009;
+    if (auto && !still && sequence.filter(item => item.ready).length > 1) targetAngle += dt * .009;
     if (!dragging && !auto && !motion.matches && Math.abs(velocity) > .001) { targetAngle += velocity * dt; velocity *= Math.exp(-dt / 190); }
     const easing = motion.matches ? 1 : 1 - Math.exp(-dt / (dragging ? 40 : 95));
     angle += (targetAngle - angle) * easing; zoom += (targetZoom - zoom) * easing;
@@ -153,7 +154,7 @@ export function initDressViewer({ dress }) {
     pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
     if (pointers.size === 2) { targetZoom = clamp(pinchStartZoom * distance() / Math.max(1, pinchDistance), 1, 4); velocity = 0; }
     else if (pan || targetZoom > 1.05) { targetX += event.clientX - old.x; targetY += event.clientY - old.y; velocity = 0; }
-    else if (hasRotation && !detail) {
+    else if (hasRotation && !still) {
       const delta = (event.clientX - old.x) * 360 / Math.max(300, host.clientWidth * 1.45);
       targetAngle += delta;
       velocity = clamp(delta / Math.max(8, now - lastDrag), -.6, .6);
@@ -176,9 +177,9 @@ export function initDressViewer({ dress }) {
     if (event.key === '-') { event.preventDefault(); setZoom(targetZoom - .35); }
     if (event.key === 'Home') { event.preventDefault(); reset(); }
   });
-  if (slider) on(slider, 'input', () => { stop(); detail = false; targetAngle = angle = Number(slider.value); requestFrame(); });
-  if (play) on(play, 'click', () => { auto = !auto; detail = false; velocity = 0; playState(); requestFrame(); });
-  function reset() { stop(); detail = false; pan = false; zoom = targetZoom = 1; x = y = targetX = targetY = 0; angle = targetAngle = 0; host.querySelector('[data-viewer="pan"]').setAttribute('aria-pressed', 'false'); requestFrame(); }
+  if (slider) on(slider, 'input', () => { stop(); still = ''; targetAngle = angle = Number(slider.value); requestFrame(); });
+  if (play) on(play, 'click', () => { auto = !auto; still = ''; velocity = 0; playState(); requestFrame(); });
+  function reset() { stop(); still = ''; pan = false; zoom = targetZoom = 1; x = y = targetX = targetY = 0; angle = targetAngle = 0; host.querySelector('[data-viewer="pan"]').setAttribute('aria-pressed', 'false'); requestFrame(); }
   function exitFullscreenFallback() { host.classList.remove('fullscreen-fallback'); document.body.classList.remove('viewer-fullscreen-open'); }
   on(document, 'keydown', event => { if (event.key === 'Escape') exitFullscreenFallback(); });
   host.querySelectorAll('[data-viewer]').forEach(button => on(button, 'click', async () => {
@@ -200,9 +201,14 @@ export function initDressViewer({ dress }) {
   }));
   document.querySelectorAll('[data-angle]').forEach(button => on(button, 'click', () => {
     stop(); targetZoom = 1; targetX = targetY = 0;
-    if (button.dataset.angle === 'detail') { detail = true; requestFrame(); }
+    if (button.dataset.angle === 'detail') { still = dress.detailImage || dress.image; requestFrame(); }
     else showAngle(Number(Object.keys(anchors).find(key => anchors[key] === button.dataset.angle)), false);
   }));
+  document.querySelectorAll('[data-photo]').forEach(button => on(button, 'click', () => {
+    stop(); targetZoom = 1; targetX = targetY = 0;
+    still = button.dataset.photo; requestFrame();
+  }));
+  if (!hasRotation && document.querySelector('[data-photo]')) still = dress.image;
   on(motion, 'change', () => { if (motion.matches) stop(); requestFrame(); });
   on(document, 'visibilitychange', () => { cancelAnimationFrame(raf); raf = 0; lastTime = 0; if (!document.hidden) requestFrame(); });
   const observer = new IntersectionObserver(entries => { visible = entries[0].isIntersecting; if (visible) { lastTime = 0; requestFrame(); } else { cancelAnimationFrame(raf); raf = 0; } }, { threshold: .05 });

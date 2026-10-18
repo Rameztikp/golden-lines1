@@ -146,7 +146,8 @@ const seed={
       "detailImage": "/images/lian-detail.jpg",
       "colors": [
         "ivory"
-      ]
+      ],
+      "gallery": []
     },
     {
       "id": "reem",
@@ -174,7 +175,8 @@ const seed={
       "detailImage": "",
       "colors": [
         "white"
-      ]
+      ],
+      "gallery": []
     },
     {
       "id": "malaki",
@@ -202,7 +204,8 @@ const seed={
       "detailImage": "",
       "colors": [
         "champagne"
-      ]
+      ],
+      "gallery": []
     },
     {
       "id": "noor",
@@ -229,7 +232,8 @@ const seed={
       "detailImage": "",
       "colors": [
         "white"
-      ]
+      ],
+      "gallery": []
     },
     {
       "id": "jood",
@@ -258,7 +262,8 @@ const seed={
       "detailImage": "",
       "colors": [
         "ivory"
-      ]
+      ],
+      "gallery": []
     },
     {
       "id": "yasmin",
@@ -286,7 +291,8 @@ const seed={
       "detailImage": "",
       "colors": [
         "pink"
-      ]
+      ],
+      "gallery": []
     },
     {
       "id": "sara",
@@ -314,7 +320,8 @@ const seed={
       "detailImage": "",
       "colors": [
         "ivory"
-      ]
+      ],
+      "gallery": []
     },
     {
       "id": "dana",
@@ -342,7 +349,8 @@ const seed={
       "detailImage": "",
       "colors": [
         "white"
-      ]
+      ],
+      "gallery": []
     }
   ],
   "collections": [
@@ -404,7 +412,8 @@ const seed={
   "pages": {},
   "imageOverrides": {},
   "hiddenSections": {}
-};
+}
+;
 import {renderPage,robotsTxt,sitemapXml,DEFAULT_ORIGIN} from './seo.mjs';
 export class HttpError extends Error { constructor(status,message){super(message);this.status=status;} }
 const fail=(s,m)=>{throw new HttpError(s,m)};
@@ -471,7 +480,7 @@ function validateData(d){
  for(const list of [d.dresses,d.collections,d.designers]){const ids=new Set();if(list.length>500)fail(400,'عدد العناصر كبير.');for(const v of list){if(!own(v)||typeof v.id!=='string'||!/^[a-zA-Z0-9_-]{1,60}$/.test(v.id)||ids.has(v.id))fail(400,'معرف مكرر أو غير صالح.');ids.add(v.id);text(v.name,150,true);safeImage(v.image)}}
  for(const c of d.collections)text(c.description,2000);
  for(const c of d.designers){text(c.bio,4000);text(c.special,200)}
- for(const v of d.dresses){text(v.code,100,true);text(v.desc,5000);for(const k of ['design','materials','care'])text(v[k]||'',5000);if(!d.collections.some(x=>x.id===v.group)||!d.designers.some(x=>x.id===String(v.designer)))fail(400,'اربطي كل فستان بمجموعة ومصمم موجودين.');if(typeof v.published!=='boolean'||!Number.isFinite(v.order))fail(400,'حالة الفستان غير صحيحة.');if(!['long','short','none','off'].includes(v.sleeve)||!['ball','mermaid','aline','straight'].includes(v.cut))fail(400,'قصة الفستان غير صحيحة.');if(!Array.isArray(v.sizes)||!v.sizes.length||v.sizes.some(x=>!Number.isInteger(x)||x<20||x>80))fail(400,'راجعي المقاسات.');if(!Array.isArray(v.colors)||!v.colors.length||v.colors.some(x=>!['white','ivory','champagne','pink'].includes(x)))fail(400,'راجعي الألوان.');if(!v.colors.includes(v.color))fail(400,'اللون الرئيسي غير متاح.');if(v.detailImage)safeImage(v.detailImage);if(!Array.isArray(v.frames)||v.frames.length>72)fail(400,'عدد الزوايا غير صالح.');const angles=new Set();for(const f of v.frames){if(!own(f)||!Number.isInteger(f.angle)||f.angle<0||f.angle>=360||angles.has(f.angle))fail(400,'زوايا العرض يجب أن تكون مختلفة وبين 0 و359.');angles.add(f.angle);safeImage(f.src)}}
+ for(const v of d.dresses){text(v.code,100,true);text(v.desc,5000);for(const k of ['design','materials','care'])text(v[k]||'',5000);if(!d.collections.some(x=>x.id===v.group)||!d.designers.some(x=>x.id===String(v.designer)))fail(400,'اربطي كل فستان بمجموعة ومصمم موجودين.');if(typeof v.published!=='boolean'||!Number.isFinite(v.order))fail(400,'حالة الفستان غير صحيحة.');if(!['long','short','none','off'].includes(v.sleeve)||!['ball','mermaid','aline','straight'].includes(v.cut))fail(400,'قصة الفستان غير صحيحة.');if(!Array.isArray(v.sizes)||!v.sizes.length||v.sizes.some(x=>!Number.isInteger(x)||x<20||x>80))fail(400,'راجعي المقاسات.');if(!Array.isArray(v.colors)||!v.colors.length||v.colors.some(x=>!['white','ivory','champagne','pink'].includes(x)))fail(400,'راجعي الألوان.');if(!v.colors.includes(v.color))fail(400,'اللون الرئيسي غير متاح.');if(v.detailImage)safeImage(v.detailImage);for(const [k,hosts,label] of [['instagramVideo',['instagram.com'],'إنستقرام'],['tiktokVideo',['tiktok.com'],'تيك توك']]){if(v[k]===undefined||v[k]===''){delete v[k];continue}text(v[k],500);let u;try{u=new URL(v[k])}catch{fail(400,'رابط فيديو '+label+' غير صالح.')}if(u.protocol!=='https:'||!hosts.some(h=>u.hostname===h||u.hostname.endsWith('.'+h)))fail(400,'رابط الفيديو يجب أن يكون من '+label+' ويبدأ بـ https.');v[k]=u.href}if(!Array.isArray(v.gallery)||v.gallery.length>30||new Set(v.gallery).size!==v.gallery.length)fail(400,'صور الفستان يجب ألا تتجاوز 30 صورة دون تكرار.');v.gallery.forEach(safeImage);if(!Array.isArray(v.frames)||v.frames.length>72)fail(400,'عدد الزوايا غير صالح.');const angles=new Set();for(const f of v.frames){if(!own(f)||!Number.isInteger(f.angle)||f.angle<0||f.angle>=360||angles.has(f.angle))fail(400,'زوايا العرض يجب أن تكون مختلفة وبين 0 و359.');angles.add(f.angle);safeImage(f.src)}}
  for(const key of ['pages','imageOverrides','hiddenSections'])if(!own(d[key]))fail(400,'إعدادات الصفحات غير صالحة.');
  for(const [p,items] of Object.entries(d.pages)){if(!['home','about','designers','collections','dresses','detail','booking','contact','shared'].includes(p)||!own(items))fail(400,'صفحة غير صحيحة.');for(const [k,v] of Object.entries(items)){if(k.length>400||['__proto__','prototype','constructor'].includes(k))fail(400,'مرجع النص غير صالح.');text(v,6000)}}
  for(const [k,v] of Object.entries(d.imageOverrides)){safeImage(k);safeImage(v)}
@@ -479,11 +488,11 @@ function validateData(d){
  return d;
 }
 async function validateImageReferences(data,env){
- const urls=[data.settings.logo,...Object.values(data.imageOverrides),...data.collections.map(x=>x.image),...data.designers.map(x=>x.image),...data.dresses.flatMap(x=>[x.image,x.detailImage,...x.frames.map(f=>f.src)])].filter(Boolean);
+ const urls=[data.settings.logo,...Object.values(data.imageOverrides),...data.collections.map(x=>x.image),...data.designers.map(x=>x.image),...data.dresses.flatMap(x=>[x.image,x.detailImage,...x.gallery,...x.frames.map(f=>f.src)])].filter(Boolean);
  const uploaded=new Set((await statement(env,'SELECT id FROM media').all()).results.map(x=>'/media/'+x.id));
  for(const url of new Set(urls))if(!imagePaths.includes(url)&&!uploaded.has(url))fail(400,'إحدى الصور غير موجودة في المكتبة. ارفعيها أو اختاري صورة موجودة.');
 }
-async function content(env){const row=await statement(env,'SELECT data,revision FROM content WHERE id = ?','site').first();return row?{data:JSON.parse(row.data),revision:row.revision}:{data:structuredClone(seed),revision:0}}
+async function content(env){const row=await statement(env,'SELECT data,revision FROM content WHERE id = ?','site').first();const data=row?JSON.parse(row.data):structuredClone(seed);for(const v of data.dresses||[])v.gallery??=[];return {data,revision:row?row.revision:0}}
 async function log(env,user,action,target){return statement(env,'INSERT INTO audit (id,actor,action,target,created) VALUES (?,?,?,?,?)',id(),user.email,action,target,now()).run()}
 async function identity(request,env){
  const uid=request.headers.get('oai-authenticated-user-id'),mail=request.headers.get('oai-authenticated-user-email')?.toLowerCase();if(!uid||!mail)fail(401,'سجّلي الدخول للوصول إلى لوحة التحكم.');
