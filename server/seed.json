@@ -145,7 +145,8 @@
       "detailImage": "/images/lian-detail.jpg",
       "colors": [
         "ivory"
-      ]
+      ],
+      "gallery": []
     },
     {
       "id": "reem",
@@ -173,7 +174,8 @@
       "detailImage": "",
       "colors": [
         "white"
-      ]
+      ],
+      "gallery": []
     },
     {
       "id": "malaki",
@@ -201,7 +203,8 @@
       "detailImage": "",
       "colors": [
         "champagne"
-      ]
+      ],
+      "gallery": []
     },
     {
       "id": "noor",
@@ -228,7 +231,8 @@
       "detailImage": "",
       "colors": [
         "white"
-      ]
+      ],
+      "gallery": []
     },
     {
       "id": "jood",
@@ -257,7 +261,8 @@
       "detailImage": "",
       "colors": [
         "ivory"
-      ]
+      ],
+      "gallery": []
     },
     {
       "id": "yasmin",
@@ -285,7 +290,8 @@
       "detailImage": "",
       "colors": [
         "pink"
-      ]
+      ],
+      "gallery": []
     },
     {
       "id": "sara",
@@ -313,7 +319,8 @@
       "detailImage": "",
       "colors": [
         "ivory"
-      ]
+      ],
+      "gallery": []
     },
     {
       "id": "dana",
@@ -341,7 +348,8 @@
       "detailImage": "",
       "colors": [
         "white"
-      ]
+      ],
+      "gallery": []
     }
   ],
   "collections": [
