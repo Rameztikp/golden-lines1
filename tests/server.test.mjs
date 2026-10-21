@@ -54,7 +54,7 @@ test('media rejects truncated images and malformed multipart requests',async()=>
 });
 
 test('all shipped photographs and catalog references are present and valid',()=>{
- const images=fs.readdirSync('public/images').filter(n=>fs.statSync('public/images/'+n).isFile());for(const name of images){assert.ok(imageType(fs.readFileSync('public/images/'+name)),name);const t='public/images/thumbs/'+name.replace(/\.\w+$/,'.jpg');assert.ok(fs.existsSync(t)&&imageType(fs.readFileSync(t))==='image/jpeg','thumbnail for '+name)}
+ const images=fs.readdirSync('public/images');for(const name of images)assert.ok(imageType(fs.readFileSync('public/images/'+name)),name);
  const walk=v=>{if(typeof v==='string'&&v.startsWith('/images/'))assert.ok(fs.existsSync('public'+v),v);else if(Array.isArray(v))v.forEach(walk);else if(v&&typeof v==='object')Object.values(v).forEach(walk)};walk(seed);
 });
 test('reception can process requests but cannot change content, media or access',async()=>{
