@@ -53,7 +53,8 @@ async function upload(multiple=false,includeMov=false){return new Promise(resolv
 // don't download full-size photos. The server falls back to the original when a thumbnail is missing.
 // Admin asks for ?thumb=strict: a missing thumbnail returns 404 (placeholder shown) instead of downloading the multi‑MB original.
 // Built-in /images/* have pre-made 640px copies in /images/thumbs/.
-const thumb=u=>typeof u!=='string'?u:/^\/media\/[a-f0-9-]{36}$/.test(u)?u+'?thumb=strict':u.replace(/^\/images\/([\w.-]+)\.(jpe?g|png|webp)$/,'/images/thumbs/$1.jpg');
+let thumbVersion=0;
+const thumb=u=>typeof u!=='string'?u:/^\/media\/[a-f0-9-]{36}$/.test(u)?u+'?thumb=strict'+(thumbVersion?'&v='+thumbVersion:''):u.replace(/^\/images\/([\w.-]+)\.(jpe?g|png|webp)$/,'/images/thumbs/$1.jpg');
 const NO_THUMB='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220"><rect width="200" height="220" fill="#f3ece2"/><text x="100" y="100" text-anchor="middle" font-family="Tajawal,Arial" font-size="30" fill="#ae8b48">⏳</text><text x="100" y="140" text-anchor="middle" font-family="Tajawal,Arial" font-size="15" fill="#8b6b3e">المعاينة غير جاهزة</text></svg>');
 document.addEventListener('error',e=>{const img=e.target;if(img?.tagName==='IMG'&&img.src.includes('thumb=strict')&&!img.classList.contains('no-thumb')){img.classList.add('no-thumb');img.alt='';img.title='المعاينة غير جاهزة — اضغطي «تسريع الصور»';img.src=NO_THUMB}},true);
 async function makeThumb(blob){const bmp=await createImageBitmap(blob,{imageOrientation:'from-image'}),scale=Math.min(1,640/Math.max(bmp.width,bmp.height)),w=Math.round(bmp.width*scale),h=Math.round(bmp.height*scale),c=document.createElement('canvas');c.width=w;c.height=h;const ctx=c.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);ctx.imageSmoothingQuality='high';ctx.drawImage(bmp,0,0,w,h);bmp.close();return new Promise(r=>c.toBlob(r,'image/jpeg',0.8))}
@@ -70,29 +71,37 @@ async function optimizeImage(file){
  if(!blob||blob.size>=file.size)return file;
  return new File([blob],file.name.replace(/\.[^.]+$/,'')+(alpha?'.png':'.jpg'),{type,lastModified:Date.now()});
 }
-// One-time cleanup for images uploaded before compression existed: compress each large image, upload the new copy,
-// swap every reference in the site content in a single save, then delete the old originals.
+// Speeds up the library: for every image, compress oversized originals IN PLACE (same /media/<id> URL, so no content edits)
+// and create its small preview. Each image is independent, so an interruption keeps everything already finished.
+// No confirm() dialogs (browsers suppress them in background tabs); progress and errors stay visible in a panel.
+let compressing=false;
 async function compressLibrary(){
- const all=(await api('media')).filter(x=>x.type.startsWith('image/')),media=all.filter(x=>x.size>700*1024),small=all.filter(x=>x.size<=700*1024);
- for(const [i,m] of small.entries()){toast(`جارٍ تجهيز المعاينات ${i+1} من ${small.length}…`);try{await saveThumb(m.id,await (await fetch(m.url,{cache:'no-store'})).blob())}catch(e){console.warn(e)}}
- if(!media.length){render();toast('تم ✓ كل الصور خفيفة وجاهزة');return}
- const before=media.reduce((a,x)=>a+x.size,0);
- if(!confirm(`سيتم ضغط ${media.length} صورة (${(before/1048576).toFixed(0)} ميجابايت) واستبدالها في الموقع تلقائيًا. لا تغلقي الصفحة حتى تنتهي العملية. متابعة؟`))return;
- const swaps=[];let after=0;
- for(const [i,m] of media.entries()){
-  toast(`جارٍ ضغط الصورة ${i+1} من ${media.length}…`);
-  try{const blob=await (await fetch(m.url,{cache:'no-store'})).blob(),file=new File([blob],m.name||'image',{type:m.type}),small=await optimizeImage(file);
-   if(small===file){after+=m.size;continue}
-   const [up]=await uploadFiles([small]);swaps.push([m,up]);after+=up.size}
-  catch(e){after+=m.size;console.warn('compress failed',m.id,e)}
- }
- if(!swaps.length){toast('لم يلزم ضغط أي صورة');return}
- toast('جارٍ تحديث الموقع بالصور الجديدة…');
- const fresh=await api('content');state.data=fresh.data;state.revision=fresh.revision;
- let text=JSON.stringify(state.data);for(const [m,up] of swaps)text=text.split(m.url).join(up.url);
- await commit(JSON.parse(text));
- let removed=0;for(const [m] of swaps){try{await api('media/'+m.id,{method:'DELETE'});removed++}catch(e){console.warn('delete failed',m.id,e)}}
- render();toast(`تم ✓ ضُغطت ${swaps.length} صورة: من ${(before/1048576).toFixed(0)} إلى ${(after/1048576).toFixed(0)} ميجابايت`);
+ if(compressing)return;compressing=true;
+ const box=document.createElement('div');box.className='admin-panel';box.style.cssText='border:2px solid #ae8b48;background:#fffaf0;margin-bottom:18px';
+ $('#workspace')?.prepend(box);box.scrollIntoView({block:'start',behavior:'smooth'});
+ const show=html=>{box.innerHTML=html};
+ try{
+  const all=(await api('media')).filter(x=>x.type.startsWith('image/'));
+  let done=0,failed=0,saved=0,lastError='';const before=all.reduce((a,x)=>a+x.size,0);
+  const paint=()=>show(`<h2 style="margin:0 0 8px">⏳ جارٍ تسريع الصور… ${done+failed} من ${all.length}</h2><div style="height:10px;background:#eee4d4;border-radius:5px;overflow:hidden"><div style="height:100%;width:${Math.round((done+failed)/all.length*100)}%;background:#ae8b48"></div></div><p style="margin:10px 0 0">اتركي هذه الصفحة مفتوحة حتى ينتهي. ${failed?`<b style="color:#9b392f">تعذّر ${failed}</b> — ${esc(lastError)}`:''}</p>`);
+  paint();
+  const one=async m=>{
+   try{
+    const res=await fetch(m.url,{cache:'no-store'});if(!res.ok)throw new Error('تعذر تحميل الصورة ('+res.status+')');
+    let blob=await res.blob();
+    if(m.size>700*1024){const small=await optimizeImage(new File([blob],m.name||'image',{type:m.type}));
+     if(small.size<m.size){const r=await api('media/'+m.id+'/replace',{method:'POST',headers:{'Content-Type':small.type},body:small});saved+=m.size-r.size;blob=small}}
+    const t=await makeThumb(blob);if(!t)throw new Error('تعذر إنشاء المعاينة');
+    await api('media/'+m.id+'/thumb',{method:'POST',headers:{'Content-Type':'image/jpeg'},body:t});done++;
+   }catch(e){failed++;lastError=(m.name||m.id)+': '+(e.message||e);console.warn('speedup failed',m.id,e)}
+   paint();
+  };
+  const queue=[...all];await Promise.all(Array.from({length:3},async()=>{while(queue.length)await one(queue.shift())}));
+  thumbVersion=Date.now();state.media=null;
+  show(`<h2 style="margin:0 0 8px">${failed?'⚠️':'✓'} انتهى: ${done} صورة جاهزة${failed?`، وتعذّرت ${failed}`:''}</h2><p style="margin:0">وُفّر ${(saved/1048576).toFixed(0)} ميجابايت (من ${(before/1048576).toFixed(0)} ميجابايت). ${failed?`آخر خطأ: ${esc(lastError)} — يمكنكِ الضغط على الزر مرة أخرى لإعادة المحاولة.`:''}</p>`);
+  const keep=box;await render();$('#workspace')?.prepend(keep);
+ }catch(e){show(`<h2 style="margin:0 0 8px;color:#9b392f">تعذّر تسريع الصور</h2><p>${esc(e.message||String(e))}</p>`)}
+ finally{compressing=false}
 }
 async function uploadFiles(files){const uploaded=[];for(let file of files){if(file.type.startsWith('image/')){toast('جارٍ تجهيز '+file.name+'…');file=await optimizeImage(file)}const signature=[...new Uint8Array(await file.slice(0,64).arrayBuffer())].map(x=>x.toString(16).padStart(2,'0')).join('');toast('جارٍ رفع '+file.name+' ('+(file.size/1048576).toFixed(1)+' ميجابايت)');const r=await api('media',{method:'POST',headers:{'Content-Type':file.type||(/\.mov$/i.test(file.name)?'video/quicktime':'application/octet-stream'),'X-Media-Upload':'raw','X-File-Name':encodeURIComponent(file.name),'X-File-Size':String(file.size),'X-File-Signature':signature},body:file});if(r.type.startsWith('image/'))await saveThumb(r.id,file);state.media.unshift(r);uploaded.push(r)}return uploaded}
 function settingsView(){const s=state.data.settings;return heading('إعدادات الموقع','معلومات المعرض وهوية الموقع وتوافر المواعيد')+`<form id="settings-form"><section class="admin-panel"><h2>معلومات المعرض</h2><div class="admin-form">${field('name','الاسم العربي',s.name,'text','required')}${field('englishName','الاسم الإنجليزي',s.englishName)}${field('tagline','النص أسفل الاسم',s.tagline)}${field('phone','رقم واتساب مع رمز الدولة',s.phone,'tel','placeholder="9665XXXXXXXX" pattern="[0-9]{8,15}"')}${field('email','البريد الرسمي',s.email,'email')}${field('address','العنوان',s.address)}${field('hours','ساعات العمل المعروضة',s.hours)}${field('mapQuery','العنوان أو الإحداثيات للخريطة',s.mapQuery)}${field('announcement','الشريط العلوي',s.announcement)}</div></section><section class="admin-panel"><h2>الهوية والروابط</h2><div class="admin-form">${imageField('logo','شعار المعرض',s.logo)}${field('gold','اللون الرئيسي',s.gold,'color')}${field('background','لون الخلفية',s.background,'color')}${field('ink','لون النص',s.ink,'color')}${['instagram','tiktok','youtube','snapchat'].map(k=>field(k,{instagram:'Instagram',tiktok:'TikTok',youtube:'YouTube',snapchat:'Snapchat'}[k],s[k],'url','placeholder="https://"')).join('')}</div></section><section class="admin-panel"><h2>الحجوزات</h2><div class="admin-form"><label class="admin-check full"><input type="checkbox" name="bookingEnabled" ${s.bookingEnabled?'checked':''}> استقبال طلبات حجز جديدة</label>${field('openTime','أول ساعة للزيارة (0–23)',s.openTime,'number','min="0" max="23" required')}${field('closeTime','نهاية ساعات الزيارة (1–24)',s.closeTime,'number','min="1" max="24" required')}${field('slotCapacity','عدد المواعيد المؤكدة المسموح بها في الساعة',s.slotCapacity,'number','min="1" max="30" required')}<div class="admin-field full"><span>أيام الإغلاق الأسبوعية</span><div class="checks">${['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'].map((n,i)=>`<label class="admin-check"><input type="checkbox" name="closedDays" value="${i}" ${s.closedDays.includes(i)?'checked':''}>${n}</label>`).join('')}</div></div>${field('services','الخدمات (خدمة في كل سطر)',s.services.join('\n'),'textarea','required')}${field('blockedDates','تواريخ مغلقة إضافية (YYYY-MM-DD، تاريخ في كل سطر)',s.blockedDates.join('\n'),'textarea')}</div></section><section class="admin-panel"><h2>إحصائيات المعرض ودليل المقاسات</h2><div class="admin-form">${field('statBrides','عدد العرائس',s.statBrides??5000,'number','min="0" required')}${field('statDesigns','عدد التصاميم',s.statDesigns??500,'number','min="0" required')}${field('statYears','سنوات الخبرة',s.statYears??10,'number','min="0" required')}${field('sizeChart','دليل المقاسات: المقاس، الصدر، الخصر، الأرداف (سطر لكل مقاس)',(s.sizeChart||[[36,84,66,92],[38,88,70,96],[40,92,74,100],[42,96,78,104],[44,100,82,108]]).map(r=>r.join(', ')).join('\n'),'textarea')}</div></section><section class="admin-panel"><h2>ظهور الموقع في البحث</h2><div class="admin-form">${field('seoTitle','عنوان الموقع',s.seoTitle)}${field('seoDescription','وصف الموقع',s.seoDescription,'textarea')}</div></section><div class="admin-actions"><button class="admin-button">حفظ الإعدادات</button></div><div class="form-error" role="alert"></div>${imageList()}</form>`}
